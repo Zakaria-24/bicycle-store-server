@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'
 import productRouter from './modules/product/product.router'
 import orderRouter from './modules/order/order.router'
-import globalErrorHandler from './errors/globalErrorHandler'
+import globalErrorHandler from './utils/globalErrorHandler'
 
 const app = express()
 app.use(express.json())
