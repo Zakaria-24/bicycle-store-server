@@ -11,19 +11,21 @@ const getProduct = async () => {
   return result
 }
 
-const getSingleProduct = async (id: string) => {
+const getSingleProduct = async (productId: string) => {
   // const result = await Product.findOne({email: 'test@test.com'})
-  const result = await Product.findById(id)
+  const result = await Product.findById(productId)
   return result
 }
 
-const updateProduct = async (id: string, payload: IProduct) => {
-  const result = await Product.findByIdAndUpdate(id, payload, { new: true })
+const updateProduct = async (productId: string, payload: IProduct) => {
+  const result = await Product.findByIdAndUpdate(productId, payload, {
+    new: true,
+  })
   return result
 }
 
-const deleteProduct = async (id: string) => {
-  const result = await Product.findByIdAndDelete(id)
+const deleteProduct = async (productId: string) => {
+  const result = await Product.findByIdAndDelete(productId)
   return result
 }
 
