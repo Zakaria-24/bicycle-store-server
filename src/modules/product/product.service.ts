@@ -6,9 +6,19 @@ const createProduct = async (payload: IProduct): Promise<IProduct> => {
   return result
 }
 
-const getProduct = async () => {
-  const result = await Product.find()
-  return result
+const getProducts = async (searchTerm?: string) => {
+  const filter = searchTerm
+    ? {
+        $or: [
+          { name: { $regex: searchTerm, $options: 'i' } },
+          { brand: { $regex: searchTerm, $options: 'i' } },
+          { type: { $regex: searchTerm, $options: 'i' } },
+        ],
+      }
+    : {}
+
+  const products = await Product.find(filter)
+  return products
 }
 
 const getSingleProduct = async (productId: string) => {
@@ -31,7 +41,7 @@ const deleteProduct = async (productId: string) => {
 
 export const productService = {
   createProduct,
-  getProduct,
+  getProducts,
   getSingleProduct,
   updateProduct,
   deleteProduct,

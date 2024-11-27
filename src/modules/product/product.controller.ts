@@ -21,20 +21,22 @@ const createProduct = async (req: Request, res: Response) => {
   }
 }
 
-const getProduct = async (req: Request, res: Response) => {
+const getProducts = async (req: Request, res: Response) => {
   try {
-    const result = await productService.getProduct()
+    const { searchTerm } = req.query
+
+    const products = await productService.getProducts(searchTerm as string)
 
     res.json({
       status: true,
-      message: 'All Bicycle get successfully',
-      data: result,
+      message: 'Bicycles retrieved successfully',
+      data: products,
     })
-  } catch (error) {
+  } catch (error: any) {
     res.json({
       status: false,
-      message: 'Failed to get all bicycle',
-      error,
+      message: 'Failed to retrieve bicycles',
+      error: error.message,
     })
   }
 }
@@ -96,7 +98,7 @@ const deleteProduct = async (req: Request, res: Response) => {
 
 export const productController = {
   createProduct,
-  getProduct,
+  getProducts,
   getSingleProduct,
   updateProduct,
   deleteProduct,
