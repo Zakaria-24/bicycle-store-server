@@ -10,7 +10,7 @@ async function server() {
       console.log(`Server running on port ${config.port} 🚴‍♂️`)
     })
   } catch (error) {
-    console.error(error)
+    console.error('❌ Failed to connect to MongoDB', error)
   }
 }
 
