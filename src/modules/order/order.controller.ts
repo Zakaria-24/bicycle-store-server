@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { orderService } from './order.service'
+import ApiError from '../../utils/ApiError'
 
 const createOrder = async (req: Request, res: Response) => {
   try {
@@ -13,11 +14,18 @@ const createOrder = async (req: Request, res: Response) => {
       data: result,
     })
   } catch (error) {
-    res.json({
-      status: false,
-      message: 'Failed to create order',
-      error,
-    })
+    // Handle validation and other errors
+    if (error instanceof ApiError) {
+      res.status(error.statusCode).json({
+        status: false,
+        message: error.message,
+      })
+    } else {
+      res.status(500).json({
+        status: false,
+        message: 'Internal Server Error',
+      })
+    }
   }
 }
 

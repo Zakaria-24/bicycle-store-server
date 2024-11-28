@@ -47,22 +47,19 @@ An API for managing bicycle products, handling orders, and calculating revenue. 
 
 ### Products
 
-| Method | Endpoint                           | Description                   |
-| ------ | ---------------------------------- | ----------------------------- |
-| POST   | `/api/products`                    | Create a new product.         |
-| GET    | `/api/products/:productId`         | Fetch product details by ID.  |
-| PATCH  | `/api/products/update-product/:id` | Update product details by ID. |
-| DELETE | `/api/products/:productId`         | Delete a product by ID.       |
+| Method | Endpoint                   | Description                   |
+| ------ | -------------------------- | ----------------------------- |
+| POST   | `/api/products`            | Create a new product.         |
+| GET    | `/api/products/:productId` | Fetch product details by ID.  |
+| PATCH  | `/api/products/:productId` | Update product details by ID. |
+| DELETE | `/api/products/:productId` | Delete a product by ID.       |
 
 ### Orders
 
-| Method | Endpoint              | Description              |
-| ------ | --------------------- | ------------------------ |
-| POST   | `/api/orders`         | Create a new order.      |
-| GET    | `/api/orders`         | Fetch all orders.        |
-| GET    | `/api/orders/revenue` | Calculate total revenue. |
-
----
+| Method | Endpoint                        | Description              |
+| ------ | ------------------------------- | ------------------------ |
+| POST   | `/api/orders`                   | Create a new order.      |
+| GET    | `/api/orders/calculate-revenue` | Calculate total revenue. |
 
 ## Installation and Setup
 
@@ -75,10 +72,8 @@ An API for managing bicycle products, handling orders, and calculating revenue. 
 ### Steps to Set Up Locally
 
 1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/your-repo/bicycle-shop-api.git
-   cd bicycle-shop-api
-   ```
+   git clone (copy repository)
+
 2. **Install dependencies:**
 
 - npm install
@@ -89,6 +84,8 @@ An API for managing bicycle products, handling orders, and calculating revenue. 
 - MONGO_URI=your_mongodb_connection_string
 - NODE_ENV=development
 
-4. **Run the application:**
+4. **setup prettier and eslint**
+
+5. **Run the application:**
 
 - npm run dev

@@ -1,7 +1,15 @@
+import ApiError from '../../utils/ApiError'
 import { IProduct } from './product.interface'
 import Product from './product.model'
 
 const createProduct = async (payload: IProduct): Promise<IProduct> => {
+  if (payload.price < 0) {
+    throw ApiError.validationError('Price must be positive')
+  }
+  if (payload.quantity < 0) {
+    throw ApiError.validationError('quantity must be positive')
+  }
+
   const result = await Product.create(payload)
   return result
 }
@@ -30,6 +38,7 @@ const getSingleProduct = async (productId: string) => {
 const updateProduct = async (productId: string, payload: IProduct) => {
   const result = await Product.findByIdAndUpdate(productId, payload, {
     new: true,
+    runValidators: true,
   })
   return result
 }

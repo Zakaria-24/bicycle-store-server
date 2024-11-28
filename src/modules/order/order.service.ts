@@ -1,3 +1,4 @@
+import ApiError from '../../utils/ApiError'
 import Product from '../product/product.model'
 import { IOrder } from './order.interface'
 import Order from './order.model'
@@ -8,12 +9,16 @@ const createOrder = async (payload: IOrder): Promise<IOrder> => {
   // Fetch product details(main product that will be ordered)
   const productDetails = await Product.findById(product)
   if (!productDetails) {
-    throw new Error('Product not found')
+    throw ApiError.notFound('Product not found')
+  }
+
+  if (productDetails.quantity == 0) {
+    throw ApiError.insufficientStock('order at lest one')
   }
 
   // Validate stock(order product er quantity jodi main j product{productdetails.quantity} ache tar quantity er cheye beshi hoy tahole Insufficient stock  )
   if (productDetails.quantity < quantity) {
-    throw new Error('Insufficient stock')
+    throw ApiError.insufficientStock('Insufficient stock')
   }
 
   // Calculate total price

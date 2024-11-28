@@ -1,22 +1,36 @@
 import { Request, Response } from 'express'
 import { productService } from './product.service'
+import ApiError from '../../utils/ApiError'
 
 const createProduct = async (req: Request, res: Response) => {
   try {
     const payload = req.body
+    const requiredFields = [
+      'name',
+      'brand',
+      'price',
+      'type',
+      'description',
+      'quantity',
+      'inStock',
+    ]
 
+    for (const field of requiredFields) {
+      if (payload[field] === undefined || payload[field] === null) {
+        throw ApiError.validationError(`The '${field}' field is required.`)
+      }
+    }
     const result = await productService.createProduct(payload)
 
-    res.json({
-      status: true,
-      message: 'Bicycle created successfully',
+    res.status(201).json({
+      success: true,
+      message: 'BiCycle created successfully',
       data: result,
     })
-  } catch (error) {
-    res.json({
-      status: false,
-      message: 'Failed to create bicycle',
-      error,
+  } catch (error: any) {
+    res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message || 'Internal Server Error',
     })
   }
 }
@@ -25,36 +39,42 @@ const getProducts = async (req: Request, res: Response) => {
   try {
     const { searchTerm } = req.query
 
-    const products = await productService.getProducts(searchTerm as string)
+    const result = await productService.getProducts(searchTerm as string)
+
+    if (!result) {
+      throw ApiError.notFound('BiCycles not found')
+    }
 
     res.json({
-      status: true,
-      message: 'Bicycles retrieved successfully',
-      data: products,
+      success: true,
+      message: 'BiCycle retrieved successfully',
+      data: result,
     })
   } catch (error: any) {
-    res.json({
-      status: false,
-      message: 'Failed to retrieve bicycles',
-      error: error.message,
+    res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message || 'Internal Server Error',
     })
   }
 }
 
 const getSingleProduct = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id
-    const result = await productService.getSingleProduct(id)
+    const { productId } = req.params
+    const result = await productService.getSingleProduct(productId)
+    if (!result) {
+      throw ApiError.notFound('BiCycle not found')
+    }
+
     res.json({
-      status: true,
-      message: 'Bicycle get successfully',
+      success: true,
+      message: 'BiCycle retrieved successfully',
       data: result,
     })
-  } catch (error) {
-    res.json({
-      status: false,
-      message: 'Failed to get bicycle',
-      error,
+  } catch (error: any) {
+    res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message || 'Internal Server Error',
     })
   }
 }
@@ -62,36 +82,41 @@ const getSingleProduct = async (req: Request, res: Response) => {
 const updateProduct = async (req: Request, res: Response) => {
   try {
     const payload = req.body
-    const id = req.params.id
-    const result = await productService.updateProduct(id, payload)
+    const { productId } = req.params
+    const result = await productService.updateProduct(productId, payload)
+    if (!result) {
+      throw ApiError.notFound('BiCycle not found')
+    }
+
     res.json({
-      status: true,
-      message: 'Bicycle updated successfully',
+      success: true,
+      message: 'BiCycle updated successfully',
       data: result,
     })
-  } catch (error) {
-    res.json({
-      status: false,
-      message: 'Failed to update bicycle',
-      error,
+  } catch (error: any) {
+    res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message || 'Internal Server Error',
     })
   }
 }
 
 const deleteProduct = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id
-    const result = await productService.deleteProduct(id)
+    const { productId } = req.params
+    const result = await productService.deleteProduct(productId)
+    if (!result) {
+      throw ApiError.notFound('BiCycle not found')
+    }
+
     res.json({
-      status: true,
-      message: 'Bicycle deleted successfully',
-      data: result,
+      success: true,
+      message: 'BiCycle deleted successfully',
     })
-  } catch (error) {
-    res.json({
-      status: false,
-      message: 'Failed to delete bicycle',
-      error,
+  } catch (error: any) {
+    res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message || 'Internal Server Error',
     })
   }
 }
