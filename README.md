@@ -31,6 +31,7 @@ An API for managing bicycle products, handling orders, and calculating revenue. 
 - **Validation:**
   - Schema-based validation using Mongoose.
   - Email and data type validation for enhanced security.
+  - using zod
 
 ---
 
