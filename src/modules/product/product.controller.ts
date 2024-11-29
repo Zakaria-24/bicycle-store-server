@@ -1,36 +1,29 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express'
 import { productService } from './product.service'
-import ApiError from '../../utils/ApiError'
+import productValidationSchema from './product.zod.validation'
+import config from '../../config'
 
 const createProduct = async (req: Request, res: Response) => {
   try {
     const payload = req.body
-    const requiredFields = [
-      'name',
-      'brand',
-      'price',
-      'type',
-      'description',
-      'quantity',
-      'inStock',
-    ]
+    const zodParsData = productValidationSchema.parse(payload)
+    const result = await productService.createProduct(zodParsData)
 
-    for (const field of requiredFields) {
-      if (payload[field] === undefined || payload[field] === null) {
-        throw ApiError.validationError(`The '${field}' field is required.`)
-      }
-    }
-    const result = await productService.createProduct(payload)
-
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: 'BiCycle created successfully',
       data: result,
     })
   } catch (error: any) {
-    res.status(error.statusCode || 500).json({
+    res.status(404).json({
       success: false,
-      message: error.message || 'Internal Server Error',
+      message:
+        error.message == 'ZodError'
+          ? 'ValidationError'
+          : 'Something went wrong',
+      error: error,
+      stack: config.NODE_ENV == 'development' ? error.stack : undefined,
     })
   }
 }
@@ -40,20 +33,20 @@ const getProducts = async (req: Request, res: Response) => {
     const { searchTerm } = req.query
 
     const result = await productService.getProducts(searchTerm as string)
-
-    if (!result) {
-      throw ApiError.notFound('BiCycles not found')
-    }
-
     res.json({
       success: true,
       message: 'BiCycle retrieved successfully',
       data: result,
     })
   } catch (error: any) {
-    res.status(error.statusCode || 500).json({
+    res.status(404).json({
       success: false,
-      message: error.message || 'Internal Server Error',
+      message:
+        error.message == 'ZodError'
+          ? 'ValidationError'
+          : 'Something went wrong',
+      error: error,
+      stack: config.NODE_ENV == 'development' ? error.stack : undefined,
     })
   }
 }
@@ -62,19 +55,20 @@ const getSingleProduct = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params
     const result = await productService.getSingleProduct(productId)
-    if (!result) {
-      throw ApiError.notFound('BiCycle not found')
-    }
-
     res.json({
       success: true,
       message: 'BiCycle retrieved successfully',
       data: result,
     })
   } catch (error: any) {
-    res.status(error.statusCode || 500).json({
+    res.status(404).json({
       success: false,
-      message: error.message || 'Internal Server Error',
+      message:
+        error.message == 'ZodError'
+          ? 'ValidationError'
+          : 'Something went wrong',
+      error: error,
+      stack: config.NODE_ENV == 'development' ? error.stack : undefined,
     })
   }
 }
@@ -84,19 +78,20 @@ const updateProduct = async (req: Request, res: Response) => {
     const payload = req.body
     const { productId } = req.params
     const result = await productService.updateProduct(productId, payload)
-    if (!result) {
-      throw ApiError.notFound('BiCycle not found')
-    }
-
     res.json({
       success: true,
       message: 'BiCycle updated successfully',
       data: result,
     })
   } catch (error: any) {
-    res.status(error.statusCode || 500).json({
+    res.status(404).json({
       success: false,
-      message: error.message || 'Internal Server Error',
+      message:
+        error.message == 'ZodError'
+          ? 'ValidationError'
+          : 'Something went wrong',
+      error: error,
+      stack: config.NODE_ENV == 'development' ? error.stack : undefined,
     })
   }
 }
@@ -105,18 +100,20 @@ const deleteProduct = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params
     const result = await productService.deleteProduct(productId)
-    if (!result) {
-      throw ApiError.notFound('BiCycle not found')
-    }
-
     res.json({
       success: true,
       message: 'BiCycle deleted successfully',
+      data: result,
     })
   } catch (error: any) {
-    res.status(error.statusCode || 500).json({
+    res.status(404).json({
       success: false,
-      message: error.message || 'Internal Server Error',
+      message:
+        error.message == 'ZodError'
+          ? 'ValidationError'
+          : 'Something went wrong',
+      error: error,
+      stack: config.NODE_ENV == 'development' ? error.stack : undefined,
     })
   }
 }

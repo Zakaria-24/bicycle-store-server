@@ -3,7 +3,7 @@ export interface IProduct {
   brand: string
   price: number
   type: 'Mountain' | 'Road' | 'Hybrid' | 'BMX' | 'Electric'
-  description?: string | null
+  description: string
   quantity: number
   inStock: boolean
 }

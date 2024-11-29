@@ -1,7 +1,6 @@
 import express, { Request, Response } from 'express'
 import productRouter from './modules/product/product.router'
 import orderRouter from './modules/order/order.router'
-import globalErrorHandler from './utils/globalErrorHandler'
 import cors from 'cors'
 
 const app = express()
@@ -11,7 +10,6 @@ app.use(cors())
 // POST=> '/api/products/create-order'
 app.use('/api/products', productRouter)
 app.use('/api/orders', orderRouter)
-app.use(globalErrorHandler)
 
 app.get('/', (req: Request, res: Response) => {
   res.send({
