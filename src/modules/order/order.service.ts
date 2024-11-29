@@ -24,7 +24,7 @@ const createOrder = async (payload: IOrder): Promise<IOrder> => {
   // Calculate total price
   const totalPrice = bicycle.price * quantity
 
-  const order = await Order.create({ email, quantity, totalPrice, product })
+  const order = await Order.create({ email, product, quantity, totalPrice })
 
   // Update product stock
   bicycle.quantity -= quantity //bicycle.quantity = bicycle.quantity - quantity

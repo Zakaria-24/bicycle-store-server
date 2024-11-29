@@ -2,13 +2,11 @@
 import { Request, Response } from 'express'
 import { orderService } from './order.service'
 import config from '../../config'
-import orderValidationSchema from './order.zod.validation'
 
 const createOrder = async (req: Request, res: Response) => {
   try {
     const payload = req.body
-    const orderParsData = orderValidationSchema.parse(payload)
-    const result = await orderService.createOrder(orderParsData)
+    const result = await orderService.createOrder(payload)
 
     res.json({
       status: true,
@@ -18,10 +16,7 @@ const createOrder = async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(404).json({
       success: false,
-      message:
-        error.message == 'ZodError'
-          ? 'ValidationError'
-          : 'Something went wrong',
+      message: 'Something went wrong',
       error: error,
       stack: config.NODE_ENV == 'development' ? error.stack : undefined,
     })
