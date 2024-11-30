@@ -4,33 +4,7 @@ import { IOrder } from './order.interface'
 import Order from './order.model'
 
 const createOrder = async (payload: IOrder): Promise<IOrder> => {
-  // const { email, product, quantity } = payload
-
-  // Fetch product details(main product that will be ordered)
-  // const bicycle = await Product.findById(product)
-  // if (!bicycle) {
-  //   throw new Error('Product not found')
-  // }
-
-  // if (bicycle.quantity == 0) {
-  //   throw new Error('order at lest one')
-  // }
-
-  // Validate stock(order product er quantity jodi main j product{bicycle.quantity} ache tar quantity er cheye beshi hoy tahole Insufficient stock  )
-  // if (bicycle.quantity < quantity) {
-  //   throw new Error('Insufficient stock')
-  // }
-
-  // Calculate total price
-  // const totalPrice = bicycle.price * quantity
-
   const result = await Order.create(payload)
-
-  // // Update product stock
-  // bicycle.quantity -= quantity //bicycle.quantity = bicycle.quantity - quantity
-  // bicycle.inStock = bicycle.quantity > 0
-  // await bicycle.save()
-
   return result
 }
 
